@@ -1,62 +1,75 @@
-import {useRef, useState} from "react";
-import {Trash, Upload, User} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Trash, Upload, User } from "lucide-react";
 
-const ProfilePhotoSelector = ({image, setImage}) => {
-    const inputRef = useRef(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
+const ProfilePhotoSelector = ({ image, setImage }) => {
+  const inputRef = useRef(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(file);
-
-            const preview = URL.createObjectURL(file);
-            setPreviewUrl(preview);
-        }
+  useEffect(() => {
+    if (typeof image === "string") {
+      setPreviewUrl(image);
     }
+  }, [image]);
 
-    const handleRemoveImage = (e) => {
-        e.preventDefault();
-        setImage(null);
-        setPreviewUrl(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      const preview = URL.createObjectURL(file);
+      setPreviewUrl(preview);
     }
+  };
 
-    const onChooseFile = (e) => {
-        e.preventDefault();
-        inputRef.current?.click();
-    }
+  const handleRemoveImage = (e) => {
+    e.preventDefault();
+    setImage(null);
+    setPreviewUrl(null);
+  };
 
-    return (
-        <div className="flex justify-center mb-6">
-            <input type="file"
-                accept="image/*"
-                ref={inputRef}
-                onChange={handleImageChange}
-                className="hidden"
-            />
+  const onChooseFile = (e) => {
+    e.preventDefault();
+    inputRef.current?.click();
+  };
 
-            {!image ? (
-                <div className="w-20 h-20 flex items-center justify-center bg-purple-100 rounded-full relative">
-                    <User className="text-purple-500" size={35} />
+  return (
+    <div className="flex justify-center mb-6">
+      <input
+        type="file"
+        accept="image/*"
+        ref={inputRef}
+        onChange={handleImageChange}
+        className="hidden"
+      />
 
-                    <button
-                        onClick={onChooseFile}
-                        className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full absolute -bottom-1 -right-1">
-                        <Upload size={15} className="text-purple-500" />
-                    </button>
-                </div>
-            ): (
-                <div className="relative">
-                    <img src={previewUrl} alt="profile photo" className="w-20 h-20 rounded-full object-cover" />
-                    <button
-                        onClick={handleRemoveImage}
-                        className="w-8 h-8 flex items-center justify-center bg-red-800 text-white rounded-full absolute -bottom-1 -right-1">
-                        <Trash size={15}/>
-                    </button>
-                </div>
-            )}
+      {!previewUrl ? (
+        <div className="w-20 h-20 flex items-center justify-center bg-green-100 dark:bg-green-900 rounded-full relative shadow-md">
+          <User className="text-green-700 dark:text-green-300" size={32} />
+          <button
+            onClick={onChooseFile}
+            title="Upload profile photo"
+            className="w-8 h-8 flex items-center justify-center absolute -bottom-1 -right-1 rounded-md shadow bg-white dark:bg-green-700 text-green-600 dark:text-white hover:bg-green-100 dark:hover:bg-green-800 transition"
+          >
+            <Upload size={16} />
+          </button>
         </div>
-    )
-}
+      ) : (
+        <div className="relative">
+          <img
+            src={previewUrl}
+            alt="Selected profile"
+            className="w-20 h-20 rounded-md object-cover border border-green-400 shadow"
+          />
+          <button
+            onClick={handleRemoveImage}
+            title="Remove image"
+            className="w-8 h-8 flex items-center justify-center absolute -bottom-1 -right-1 rounded-md shadow bg-red-600 text-white hover:bg-red-700 transition"
+          >
+            <Trash size={16} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default ProfilePhotoSelector;

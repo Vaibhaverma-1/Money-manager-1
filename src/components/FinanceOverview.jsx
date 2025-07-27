@@ -1,29 +1,32 @@
 import CustomPieChart from "./CustomPieChart.jsx";
-import {addThousandsSeparator} from "../util/util.js";
+import { addThousandsSeparator } from "../util/util.js";
 
-const FinanceOverview = ({totalBalance, totalIncome, totalExpense}) => {
-    const COLORS = ["#59168B", "#a0090e", "#016630"];
+const FinanceOverview = ({ totalBalance, totalIncome, totalExpense }) => {
+  const COLORS = ["#16a34a", "#dc2626", "#0e7490"]; // Green, Red, Teal
 
-    const balanceData = [
-        { name: "Total Balance", amount: totalBalance },
-        { name: "Total Expenses", amount: totalExpense },
-        { name: "Total Income", amount: totalIncome },
-    ];
-    return (
-        <div className="card">
-            <div className="flex items-center justify-between">
-                <h5 className="text-lg">Financial Overview</h5>
-            </div>
+  const balanceData = [
+    { name: "Total Balance", amount: totalBalance },
+    { name: "Total Expenses", amount: totalExpense },
+    { name: "Total Income", amount: totalIncome },
+  ];
 
-            <CustomPieChart
-                data={balanceData}
-                label="Total Balance"
-                totalAmount={`₹${addThousandsSeparator(totalBalance)}`}
-                colors={COLORS}
-                showTextAnchor
-            />
-        </div>
-    )
-}
+  return (
+    <div className="rounded-md border border-green-200 dark:border-green-700 bg-white dark:bg-green-950 p-4 shadow-md">
+      <div className="mb-4">
+        <h5 className="text-lg font-semibold text-green-800 dark:text-green-100">
+          Financial Overview
+        </h5>
+      </div>
+
+      <CustomPieChart
+        data={balanceData}
+        label="Total Balance"
+        totalAmount={`₹${addThousandsSeparator(totalBalance)}`}
+        colors={COLORS}
+        showTextAnchor
+      />
+    </div>
+  );
+};
 
 export default FinanceOverview;

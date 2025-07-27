@@ -1,86 +1,99 @@
-import {useEffect, useState} from "react";
-import Input from "./Input.jsx";
-import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
-import {LoaderCircle} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { LoaderCircle } from "lucide-react";
+import EmojiPickerPopup from "./EmojiPickerPopup";
 
-const AddCategoryForm = ({onAddCategory, initialCategoryData, isEditing}) => {
-    const [category, setCategory] = useState({
-        name: "",
-        type: "income",
-        icon: ""
-    })
-    const [loading, setLoading] = useState(false);
+const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }) => {
+  const [category, setCategory] = useState({
+    name: "",
+    type: "income",
+    icon: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (isEditing && initialCategoryData) {
-            setCategory(initialCategoryData);
-        } else {
-            setCategory({name: "", type: "income", icon: ""});
-        }
-    }, [isEditing, initialCategoryData]);
-
-    const categoryTypeOptions = [
-        {value: "income", label: "Income"},
-        {value: "expense", label: "Expense"},
-    ]
-
-    const handleChange = (key, value) => {
-        setCategory({...category, [key]: value})
+  useEffect(() => {
+    if (isEditing && initialCategoryData) {
+      setCategory(initialCategoryData);
+    } else {
+      setCategory({ name: "", type: "income", icon: "" });
     }
+  }, [isEditing, initialCategoryData]);
 
-    const handleSubmit = async () => {
-        setLoading(true);
-        try {
-            await onAddCategory(category);
-        }finally {
-            setLoading(false);
-        }
+  const handleChange = (key, value) => {
+    setCategory({ ...category, [key]: value });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      await onAddCategory(category);
+    } finally {
+      setLoading(false);
     }
-    return (
-        <div className="p-4">
+  };
 
-            <EmojiPickerPopup
-                icon={category.icon}
-                onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
-            />
+  return (
+    <div className="space-y-6 p-4">
+      <EmojiPickerPopup
+        icon={category.icon}
+        onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
+      />
 
-            <Input
-                value={category.name}
-                onChange={({target}) => handleChange("name", target.value)}
-                label="Category Name"
-                placeholder="e.g., Freelance, Salary, Groceries"
-                type="text"
-            />
+      <div className="space-y-2">
+        <Label htmlFor="name">Category Name</Label>
+        <Input
+          id="name"
+          placeholder="e.g., Freelance, Salary, Groceries"
+          value={category.name}
+          onChange={(e) => handleChange("name", e.target.value)}
+        />
+      </div>
 
-            <Input
-                label="Category Type"
-                value={category.type}
-                onChange={({target}) => handleChange("type", target.value)}
-                isSelect={true}
-                options={categoryTypeOptions}
-            />
+      <div className="space-y-2">
+        <Label htmlFor="type">Category Type</Label>
+        <Select
+          value={category.type}
+          onValueChange={(value) => handleChange("type", value)}
+        >
+          <SelectTrigger id="type">
+            <SelectValue placeholder="Select type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="income">Income</SelectItem>
+            <SelectItem value="expense">Expense</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-            <div className="flex justify-end mt-6">
-                <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="add-btn add-btn-fill">
-                    {loading ? (
-                        <>
-                            <LoaderCircle className="w-4 h-4 animate-spin"/>
-                            {isEditing ? "Updating..." : "Adding..."}
-                        </>
-                    ): (
-                        <>
-                            {isEditing ? "Update Category" : "Add Category"}
-                        </>
-                    )}
-                </button>
-            </div>
-        </div>
-
-    )
-}
+      <div className="flex justify-end">
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          {loading ? (
+            <>
+              <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
+              {isEditing ? "Updating..." : "Adding..."}
+            </>
+          ) : isEditing ? (
+            "Update Category"
+          ) : (
+            "Add Category"
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 export default AddCategoryForm;

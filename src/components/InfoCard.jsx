@@ -1,15 +1,24 @@
-const InfoCard = ({icon, label, value, color}) => {
-    return(
-        <div className="flex gap-6 bg-white p-6 rounded-2xl shadow-md shadow-gray-100 border border-gray-200/50">
-            <div className={`w-14 h-14 flex items-center justify-center text-[26px] text-white ${color} rounded-full drop-shadow-xl`}>
-                {icon}
-            </div>
-            <div>
-                <h6 className="text-sm text-gray-500 mb-1">{label}</h6>
-                <span className="text-[22px]">&#8377;{value}</span>
-            </div>
-        </div>
-    )
-}
+const InfoCard = ({ icon, label, value, color }) => {
+  return (
+    <div className="flex gap-6 rounded-md bg-white dark:bg-green-950 p-6 border border-green-200 dark:border-green-700 shadow-md">
+      {/* Icon Circle */}
+      <div
+        className={`w-14 h-14 flex items-center justify-center text-[26px] text-white ${color} rounded-md drop-shadow-xl`}
+      >
+        {icon}
+      </div>
+
+      {/* Info Section */}
+      <div>
+        <h6 className="text-sm text-gray-500 dark:text-green-300 mb-1">
+          {label}
+        </h6>
+        <span className="text-[22px] text-green-800 dark:text-green-100">
+          ₹{value}
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export default InfoCard;

@@ -1,84 +1,101 @@
 import { useState, useEffect } from "react";
-import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
-import Input from "./Input.jsx";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import EmojiPickerPopup from "./EmojiPickerPopup";
+import { PlusCircle } from "lucide-react";
 
-// Add 'categories' prop
 const AddExpenseForm = ({ onAddExpense, categories }) => {
-    const [expense, setExpense] = useState({ // Renamed 'income' state to 'expense' for clarity
-        name,
-        categoryId: "", // Changed from 'category' to 'categoryId'
-        amount: "",
-        date: "",
-        icon: "", // Icon might be associated with the selected category, or kept separate for custom entries
-    });
+  const [expense, setExpense] = useState({
+    name: "",
+    categoryId: "",
+    amount: "",
+    date: "",
+    icon: "",
+  });
 
-    // Effect to set a default category if categories are loaded and none is selected
-    useEffect(() => {
-        if (categories && categories.length > 0 && !expense.categoryId) {
-            // Automatically select the first category as default if none is chosen
-            setExpense((prev) => ({ ...prev, categoryId: categories[0].id })); // Use categories[0].id for MySQL
-        }
-    }, [categories, expense.categoryId]);
+  useEffect(() => {
+    if (categories?.length > 0 && !expense.categoryId) {
+      setExpense((prev) => ({ ...prev, categoryId: categories[0].id }));
+    }
+  }, [categories, expense.categoryId]);
 
-    const handleChange = (key, value) => setExpense({ ...expense, [key]: value }); // Changed setIncome to setExpense
+  const handleChange = (key, value) =>
+    setExpense((prev) => ({ ...prev, [key]: value }));
 
-    // Map categories to the format expected by the reusable Input dropdown
-    const categoryOptions = categories.map((cat) => ({
-        value: cat.id, // Correct for MySQL 'id'
-        label: `${cat.name}`, // Display icon and name in dropdown
-    }));
+  return (
+    <div className="space-y-5 p-4">
+      <EmojiPickerPopup
+        icon={expense.icon}
+        onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
+      />
 
-    return (
-        <div>
-            <EmojiPickerPopup
-                icon={expense.icon} // Uses expense.icon now
-                onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
-            />
+      <div className="space-y-2">
+        <Label>Expense Title</Label>
+        <Input
+          type="text"
+          placeholder="e.g., Electricity Bill"
+          value={expense.name}
+          onChange={(e) => handleChange("name", e.target.value)}
+        />
+      </div>
 
-            <Input
-                value={expense.name}
-                onChange={({ target }) => handleChange("name", target.value)}
-                label="Income Source"
-                placeholder="e.g., Electricity, Wifi"
-                type="text"
-            />
+      <div className="space-y-2">
+        <Label>Category</Label>
+        <Select
+          value={expense.categoryId}
+          onValueChange={(val) => handleChange("categoryId", val)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-            {/* Replaced Input for 'Category' text with a dropdown for 'Category' */}
-            <Input
-                label="Category"
-                value={expense.categoryId}
-                onChange={({ target }) => handleChange("categoryId", target.value)}
-                isSelect={true}
-                options={categoryOptions}
-            />
+      <div className="space-y-2">
+        <Label>Amount</Label>
+        <Input
+          type="number"
+          placeholder="e.g., 150"
+          value={expense.amount}
+          onChange={(e) => handleChange("amount", e.target.value)}
+        />
+      </div>
 
-            <Input
-                value={expense.amount}
-                onChange={({ target }) => handleChange("amount", target.value)}
-                label="Amount"
-                placeholder="e.g., 150.00"
-                type="number"
-            />
+      <div className="space-y-2">
+        <Label>Date</Label>
+        <Input
+          type="date"
+          value={expense.date}
+          onChange={(e) => handleChange("date", e.target.value)}
+        />
+      </div>
 
-            <Input
-                value={expense.date}
-                onChange={({ target }) => handleChange("date", target.value)}
-                label="Date"
-                placeholder=""
-                type="date"
-            />
-
-            <div className="flex justify-end mt-6">
-                <button
-                    type="button"
-                    className="add-btn add-btn-fill"
-                    onClick={() => onAddExpense(expense)} // Changed income to expense
-                >
-                    Add Expense
-                </button>
-            </div>
-        </div>
-    );
+      <div className="flex justify-end pt-4">
+        <Button
+          onClick={() => onAddExpense(expense)}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Add Expense
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default AddExpenseForm;
