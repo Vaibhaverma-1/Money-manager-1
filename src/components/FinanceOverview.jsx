@@ -2,7 +2,7 @@ import CustomPieChart from "./CustomPieChart.jsx";
 import { addThousandsSeparator } from "../util/util.js";
 
 const FinanceOverview = ({ totalBalance, totalIncome, totalExpense }) => {
-  const COLORS = ["#16a34a", "#dc2626", "#0e7490"]; // Green, Red, Teal
+  const COLORS = ["#BBF7D0", "#FECACA", "#BFDBFE"]; // Green, Red, Teal
 
   const balanceData = [
     { name: "Total Balance", amount: totalBalance },
@@ -21,7 +21,7 @@ const FinanceOverview = ({ totalBalance, totalIncome, totalExpense }) => {
       <CustomPieChart
         data={balanceData}
         label="Total Balance"
-        totalAmount={`₹${addThousandsSeparator(totalBalance)}`}
+        totalAmount={`${addThousandsSeparator(totalBalance)}`}
         colors={COLORS}
         showTextAnchor
       />
