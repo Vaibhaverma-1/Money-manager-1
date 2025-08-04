@@ -113,6 +113,17 @@ const Login = () => {
                 "LOGIN"
               )}
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail("test@fintrack.com");
+                setPassword("Test@123");
+                handleSubmit({ preventDefault: () => {} }); // manually trigger login
+              }}
+              className="w-full mt-2 py-2 text-green-700 border border-green-700 rounded-md text-sm hover:bg-green-50 transition-all"
+            >
+              Use Test Credentials
+            </button>
 
             <p className="text-sm text-center mt-6 text-gray-700">
               Don&apos;t have an account?{" "}
