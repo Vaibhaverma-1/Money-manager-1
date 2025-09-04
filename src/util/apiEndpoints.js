@@ -1,4 +1,4 @@
-export const BASE_URL = "https://money-manager-74ol.onrender.com/api/v1.0";
+export const BASE_URL = "https://money.34-14-204-50.nip.io/api/v1.0";
 const CLOUDINARY_CLOUD_NAME = "df6hgnhyv";
 
 export const API_ENDPOINTS = {

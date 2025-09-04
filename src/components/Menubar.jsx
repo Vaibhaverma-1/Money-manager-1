@@ -79,12 +79,12 @@ const Menubar = ({ activeMenu }) => {
           <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-md shadow-md z-50">
             <div className="px-4 py-3 border-b border-green-100 dark:border-green-700">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-md bg-green-100 dark:bg-green-800 flex items-center justify-center">
                   {user?.profileImageUrl ? (
                     <img
                       src={user.profileImageUrl}
                       alt="profile"
-                      className="w-full h-full rounded-full object-cover"
+                      className="w-full h-full rounded-md object-cover"
                     />
                   ) : (
                     <User className="w-4 h-4 text-green-600" />
