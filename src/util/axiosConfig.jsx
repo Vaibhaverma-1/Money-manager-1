@@ -28,6 +28,23 @@ const getPath = (config) => {
 };
 
 // REQUEST interceptor
+
+axiosConfig.interceptors.request.use((config) => {
+  try {
+    const path = new URL(config.url, config.baseURL).pathname;
+    const auth = config.headers?.Authorization;
+    console.log(
+      "→",
+      config.method?.toUpperCase(),
+      path,
+      "Auth?",
+      !!auth,
+      auth?.slice(0, 20) || ""
+    );
+  } catch {}
+  return config;
+});
+
 axiosConfig.interceptors.request.use(
   (config) => {
     const path = getPath(config);
